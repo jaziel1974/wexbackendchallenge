@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  postgres-db:
+    image: postgres:15
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: wexdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  spring-app:
+    image: wexbackendchallenge:latest
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/wexdb
+    depends_on:
+      - postgres-db
+
+volumes:
+  cache:
+    driver: local
